@@ -49,5 +49,22 @@ internal sealed class PrintToConsoleUseCases
 
             return 0;
         }
+
+        public int Visit(Triangle triangle)
+        {
+            for (int y = 0; y < triangle.A; y++)
+            {
+                for (int x = 0; x <= triangle.B; x++)
+                {
+                    int currentWidth = (triangle.B * (y + 1)) / triangle.A;
+                    if (x == 0 || y == triangle.A - 1 || x == currentWidth)
+                        Console.Write('*');
+                    else
+                        Console.Write(' ');
+                }
+                Console.WriteLine();
+            }
+            return 0;
+        }
     }
 }
