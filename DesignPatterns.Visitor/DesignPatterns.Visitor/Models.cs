@@ -7,6 +7,18 @@ public interface IFigureVisitor<T>
     T Visit(Triangle triangle);
 }
 
+public sealed record MatchFigure<T>(
+    Func<Circle, T> MapCircle, 
+    Func<Rectangle, T> MapRectangle,
+    Func<Triangle, T> MapTriangle) : IFigureVisitor<T>
+{
+    public T Visit(Circle circle) => MapCircle(circle);
+
+    public T Visit(Rectangle rectangle) => MapRectangle(rectangle);
+
+    public T Visit(Triangle triangle) => MapTriangle(triangle);
+}
+
 public interface IFigure
 {
     T Accept<T>(IFigureVisitor<T> visitor);
