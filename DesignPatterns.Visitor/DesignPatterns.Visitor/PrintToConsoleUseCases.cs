@@ -13,35 +13,46 @@ internal sealed class PrintToConsoleUseCases
 
     internal void Print(IFigure figure)
     {
-        if (figure is Circle circle)
+        _ = figure switch
         {
-            double thickness = 0.4;
-            double rIn = circle.R - thickness, rOut = circle.R + thickness;
+            Circle circle => PrintCircle(circle),
+            Rectangle rectangle => PrintRectangle(rectangle),
+            _ => throw new NotImplementedException()
+        };
+    }
 
-            for (int y = -circle.R; y <= circle.R; y++)
-            {
-                for (int x = -circle.R; x <= circle.R; x++)
-                {
-                    double value = x * x + y * y;
-                    if (value >= rIn * rIn && value <= rOut * rOut)
-                        Console.Write('*');
-                    else
-                        Console.Write(' ');
-                }
-                Console.WriteLine();
-            }
-        }
+    private static int PrintCircle(Circle circle)
+    {
+        double thickness = 0.4;
+        double rIn = circle.R - thickness, rOut = circle.R + thickness;
 
-        if (figure is Rectangle rectangle)
+        for (int y = -circle.R; y <= circle.R; y++)
         {
-            for (int y = 0; y < rectangle.A; y++)
+            for (int x = -circle.R; x <= circle.R; x++)
             {
-                for (int x = 0; x < rectangle.B; x++)
-                {
+                double value = x * x + y * y;
+                if (value >= rIn * rIn && value <= rOut * rOut)
                     Console.Write('*');
-                }
-                Console.WriteLine();
+                else
+                    Console.Write(' ');
             }
+            Console.WriteLine();
         }
+
+        return 0;
+    }
+
+    private static int PrintRectangle(Rectangle rectangle)
+    {
+        for (int y = 0; y < rectangle.A; y++)
+        {
+            for (int x = 0; x < rectangle.B; x++)
+            {
+                Console.Write('*');
+            }
+            Console.WriteLine();
+        }
+
+        return 0;
     }
 }
