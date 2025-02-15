@@ -6,25 +6,27 @@ internal sealed class PublishUseCases
     {
         foreach (var figure in figures)
         {
-            await figure.Accept(new PublishAsyncVisitor(ct));
+            await figure.Accept(PublishAsyncVisitor.Instance)(ct);
         }
     }
 
-    private sealed class PublishAsyncVisitor(CancellationToken ct) : IFigureVisitor<Task>
+    private sealed class PublishAsyncVisitor : IFigureVisitor<Func<CancellationToken, Task>>
     {
-        public async Task Visit(Circle circle)
-        {
-            await Task.Delay(1, ct);
-        }
+        public static PublishAsyncVisitor Instance { get; } = new();
 
-        public async Task Visit(Rectangle rectangle)
+        public Func<CancellationToken, Task> Visit(Circle circle) => async ct =>
         {
             await Task.Delay(1, ct);
-        }
+        };
 
-        public async Task Visit(Triangle triangle)
+        public Func<CancellationToken, Task> Visit(Rectangle rectangle) => async ct =>
         {
             await Task.Delay(1, ct);
-        }
+        };
+
+        public Func<CancellationToken, Task> Visit(Triangle triangle) => async ct =>
+        {
+            await Task.Delay(1, ct);
+        };
     }
 }
