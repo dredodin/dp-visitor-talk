@@ -1,9 +1,22 @@
 ﻿namespace DesignPatterns.Visitor;
 
-public interface IFigure;
+public interface IFigureVisitor<T>
+{
+    T Visit(Circle circle);
+    T Visit(Rectangle rectangle);
+}
 
-public sealed record Circle(int R) : IFigure;
+public interface IFigure
+{
+    T Accept<T>(IFigureVisitor<T> visitor);
+}
 
-public sealed record Rectangle(int A, int B): IFigure;
+public sealed record Circle(int R) : IFigure
+{
+    public T Accept<T>(IFigureVisitor<T> visitor) => visitor.Visit(this);
+}
 
-public sealed record Triangle(int A, int B, int C): IFigure;
+public sealed record Rectangle(int A, int B) : IFigure
+{
+    public T Accept<T>(IFigureVisitor<T> visitor) => visitor.Visit(this);
+}

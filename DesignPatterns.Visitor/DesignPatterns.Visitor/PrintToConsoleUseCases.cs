@@ -6,53 +6,48 @@ internal sealed class PrintToConsoleUseCases
     {
         foreach (var figure in figures)
         {
-            Print(figure);
+            figure.Accept(PrintToConsoleVisitor.Instance);
             Console.WriteLine();
         }
     }
 
-    internal void Print(IFigure figure)
+    private sealed class PrintToConsoleVisitor : IFigureVisitor<int>
     {
-        _ = figure switch
-        {
-            Circle circle => PrintCircle(circle),
-            Rectangle rectangle => PrintRectangle(rectangle),
-            _ => throw new NotImplementedException()
-        };
-    }
+        public static PrintToConsoleVisitor Instance { get; } = new();
 
-    private static int PrintCircle(Circle circle)
-    {
-        double thickness = 0.4;
-        double rIn = circle.R - thickness, rOut = circle.R + thickness;
-
-        for (int y = -circle.R; y <= circle.R; y++)
+        public int Visit(Circle circle)
         {
-            for (int x = -circle.R; x <= circle.R; x++)
+            double thickness = 0.4;
+            double rIn = circle.R - thickness, rOut = circle.R + thickness;
+
+            for (int y = -circle.R; y <= circle.R; y++)
             {
-                double value = x * x + y * y;
-                if (value >= rIn * rIn && value <= rOut * rOut)
+                for (int x = -circle.R; x <= circle.R; x++)
+                {
+                    double value = x * x + y * y;
+                    if (value >= rIn * rIn && value <= rOut * rOut)
+                        Console.Write('*');
+                    else
+                        Console.Write(' ');
+                }
+                Console.WriteLine();
+            }
+
+            return 0;
+        }
+
+        public int Visit(Rectangle rectangle)
+        {
+            for (int y = 0; y < rectangle.A; y++)
+            {
+                for (int x = 0; x < rectangle.B; x++)
+                {
                     Console.Write('*');
-                else
-                    Console.Write(' ');
+                }
+                Console.WriteLine();
             }
-            Console.WriteLine();
+
+            return 0;
         }
-
-        return 0;
-    }
-
-    private static int PrintRectangle(Rectangle rectangle)
-    {
-        for (int y = 0; y < rectangle.A; y++)
-        {
-            for (int x = 0; x < rectangle.B; x++)
-            {
-                Console.Write('*');
-            }
-            Console.WriteLine();
-        }
-
-        return 0;
     }
 }
