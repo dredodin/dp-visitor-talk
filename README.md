@@ -17,3 +17,8 @@ This repository serves as an example of how the `Visitor` pattern can be impleme
 - Add `PublishAsyncVisitor` with state
 ## 07-visitor-with-currying
 - Add `PublishAsyncVisitor` with currying
+## 08-universal-visitor
+- Add `MatchFigure`
+- Add `calculateArea` example
+## 08-compare-with-switch
+- Add `calculateArea` logic via switch expression
