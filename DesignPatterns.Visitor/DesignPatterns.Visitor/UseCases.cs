@@ -25,6 +25,11 @@ public sealed class UseCases(DateValidator _validator)
             $"Flight Booking {flightBooking.FlightNumber} departing on {flightBooking.DepartureTime}",
             $"Seat Class: {flightBooking.SeatClass}"
         );
+
+        public BookingDetail Visit(CarRentalBooking carRentalBooking) => new(
+            $"Car Rental from {carRentalBooking.RentalCompany} on {carRentalBooking.PickupDate.ToShortDateString()}",
+            $"Insurance included: {carRentalBooking.IncludesInsurance}"
+        );
     }
 
     public async Task<bool> ValidateAsync(IEnumerable<IBooking> bookings, CancellationToken ct)
