@@ -1,4 +1,6 @@
-﻿namespace DesignPatterns.Visitor;
+﻿using System.Net.Http.Headers;
+
+namespace DesignPatterns.Visitor;
 
 public sealed record BookingDetail(string Description, string SpecificInfo);
 
@@ -35,19 +37,24 @@ public sealed class UseCases(DateValidator _validator)
     public async Task<bool> ValidateAsync(IEnumerable<IBooking> bookings, CancellationToken ct)
     {
         IEnumerable<Task<bool>> GetTasks()
-        {
+        { 
+            var validateAsync = new ValidateAsyncVisitor(_validator, ct);
             foreach (var booking in bookings)
             {
-                yield return booking switch
-                {
-                    HotelBooking hotelBooking => _validator.ValidateDateAsync(hotelBooking.CheckInDate, ct),
-                    FlightBooking flightBooking => _validator.ValidateDateAsync(flightBooking.DepartureTime, ct),
-                    _ => Task.FromResult(true)
-                };
+                yield return booking.Accept(validateAsync);
             }
         }
 
         var validationResults = await Task.WhenAll(GetTasks());
         return validationResults.All(x => x);
+    }
+
+    private sealed class ValidateAsyncVisitor(DateValidator _validator, CancellationToken ct) : IBookingVisitor<Task<bool>>
+    {
+        public Task<bool> Visit(HotelBooking hotelBooking) => _validator.ValidateDateAsync(hotelBooking.CheckInDate, ct);
+
+        public Task<bool> Visit(FlightBooking flightBooking) => _validator.ValidateDateAsync(flightBooking.DepartureTime, ct);
+
+        public Task<bool> Visit(CarRentalBooking carRentalBooking) => _validator.ValidateDateAsync(carRentalBooking.PickupDate, ct);
     }
 }
