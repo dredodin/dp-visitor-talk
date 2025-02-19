@@ -1,10 +1,10 @@
-﻿using System.Net.Http.Headers;
+﻿using static DesignPatterns.Visitor.UseCases;
 
 namespace DesignPatterns.Visitor;
 
 public sealed record BookingDetail(string Description, string SpecificInfo);
 
-public sealed class UseCases(DateValidator _validator)
+internal sealed class UseCases(ValidateAsyncVisitor _validateAsyncVisitor)
 {
     public IEnumerable<BookingDetail> GetBookingDetails(IEnumerable<IBooking> bookings)
     {
@@ -37,11 +37,10 @@ public sealed class UseCases(DateValidator _validator)
     public async Task<bool> ValidateAsync(IEnumerable<IBooking> bookings, CancellationToken ct)
     {
         IEnumerable<Task<bool>> GetTasks()
-        { 
-            var validateAsync = new ValidateAsyncVisitor(_validator, ct);
+        {
             foreach (var booking in bookings)
             {
-                yield return booking.Accept(validateAsync);
+                yield return booking.Accept(_validateAsyncVisitor).Invoke(ct);
             }
         }
 
@@ -49,12 +48,21 @@ public sealed class UseCases(DateValidator _validator)
         return validationResults.All(x => x);
     }
 
-    private sealed class ValidateAsyncVisitor(DateValidator _validator, CancellationToken ct) : IBookingVisitor<Task<bool>>
+    internal sealed class ValidateAsyncVisitor(DateValidator _validator) : IBookingVisitor<Func<CancellationToken, Task<bool>>>
     {
-        public Task<bool> Visit(HotelBooking hotelBooking) => _validator.ValidateDateAsync(hotelBooking.CheckInDate, ct);
+        public Func<CancellationToken, Task<bool>> Visit(HotelBooking hotelBooking)
+        {
+            return ct => _validator.ValidateDateAsync(hotelBooking.CheckInDate, ct);
+        }
 
-        public Task<bool> Visit(FlightBooking flightBooking) => _validator.ValidateDateAsync(flightBooking.DepartureTime, ct);
+        public Func<CancellationToken, Task<bool>> Visit(FlightBooking flightBooking)
+        {
+            return ct => _validator.ValidateDateAsync(flightBooking.DepartureTime, ct);
+        }
 
-        public Task<bool> Visit(CarRentalBooking carRentalBooking) => _validator.ValidateDateAsync(carRentalBooking.PickupDate, ct);
+        public Func<CancellationToken, Task<bool>> Visit(CarRentalBooking carRentalBooking)
+        {
+            return ct => _validator.ValidateDateAsync(carRentalBooking.PickupDate, ct);
+        }
     }
 }
