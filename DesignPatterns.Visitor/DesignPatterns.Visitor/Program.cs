@@ -24,3 +24,13 @@ foreach (var detail in useCases.GetBookingDetails(bookings))
 {
     Console.WriteLine(detail);
 }
+
+Console.WriteLine();
+var date = bookings.Select(b => b
+    .Accept(new MatchBooking<DateTime>(
+        h => h.CheckInDate,
+        f => f.DepartureTime,
+        c => c.PickupDate)
+    )
+);
+Console.WriteLine(date);
