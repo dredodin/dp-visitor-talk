@@ -1,5 +1,23 @@
 ﻿using DesignPatterns.Visitor;
+using Microsoft.Extensions.DependencyInjection;
 
-var useCase = new PrintToConsoleUseCases();
+var app = new ServiceCollection()
+    .AddTransient<DateValidator>()
+    .AddTransient<UseCases>()
+    .BuildServiceProvider();
 
-useCase.Print([new Rectangle(5, 4), new Circle(5)]);
+var useCases = app.GetRequiredService<UseCases>();
+
+List<IBooking> bookings = 
+[
+    new HotelBooking("Hotel California", DateTime.Today.AddDays(10), true),
+    new FlightBooking("Flight 200", DateTime.Now.AddDays(5), "Economy"),
+];
+
+var status = await useCases.ValidateAsync(bookings, CancellationToken.None);
+Console.WriteLine($"Validation status is: {status}");
+
+foreach (var detail in useCases.GetBookingDetails(bookings))
+{
+    Console.WriteLine(detail);
+}
