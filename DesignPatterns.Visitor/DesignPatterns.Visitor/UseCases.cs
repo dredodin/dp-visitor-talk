@@ -8,20 +8,18 @@ public sealed class UseCases(DateValidator _validator)
     {
         foreach (var booking in bookings)
         {
-            if (booking is HotelBooking hotelBooking)
+            yield return booking switch
             {
-                yield return new BookingDetail(
+                HotelBooking hotelBooking => new BookingDetail(
                     $"Hotel Booking for {hotelBooking.HotelName} on {hotelBooking.CheckInDate.ToShortDateString()}",
                     $"Breakfast included: {hotelBooking.IncludesBreakfast}"
-                );
-            }
-            else if (booking is FlightBooking flightBooking)
-            {
-                yield return new BookingDetail(
+                ),
+                FlightBooking flightBooking => new BookingDetail(
                     $"Flight Booking {flightBooking.FlightNumber} departing on {flightBooking.DepartureTime}",
                     $"Seat Class: {flightBooking.SeatClass}"
-                );
-            }
+                ),
+                _ => throw new NotImplementedException()
+            };
         }
     }
 
@@ -31,14 +29,12 @@ public sealed class UseCases(DateValidator _validator)
         {
             foreach (var booking in bookings)
             {
-                if (booking is HotelBooking hotelBooking)
+                yield return booking switch
                 {
-                    yield return _validator.ValidateDateAsync(hotelBooking.CheckInDate, ct);
-                }
-                else if (booking is FlightBooking flightBooking)
-                {
-                    yield return _validator.ValidateDateAsync(flightBooking.DepartureTime, ct);
-                }
+                    HotelBooking hotelBooking => _validator.ValidateDateAsync(hotelBooking.CheckInDate, ct),
+                    FlightBooking flightBooking => _validator.ValidateDateAsync(flightBooking.DepartureTime, ct),
+                    _ => Task.FromResult(true)
+                };
             }
         }
 
