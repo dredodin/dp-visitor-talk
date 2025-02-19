@@ -4,6 +4,7 @@ public interface IBookingVisitor<T>
 {
     T Visit(HotelBooking hotelBooking);
     T Visit(FlightBooking flightBooking);
+    T Visit(CarRentalBooking carRentalBooking);
 }
 
 public interface IBooking
@@ -21,4 +22,7 @@ public sealed record FlightBooking(string FlightNumber, DateTime DepartureTime, 
     public T Accept<T>(IBookingVisitor<T> visitor) => visitor.Visit(this);
 }
 
-//public sealed record CarRentalBooking(string RentalCompany, string CarModel, DateTime PickupDate, bool IncludesInsurance) : IBooking;
+public sealed record CarRentalBooking(string RentalCompany, string CarModel, DateTime PickupDate, bool IncludesInsurance) : IBooking
+{
+    public T Accept<T>(IBookingVisitor<T> visitor) => visitor.Visit(this);
+}
