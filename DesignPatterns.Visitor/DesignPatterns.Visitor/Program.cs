@@ -9,7 +9,7 @@ var app = new ServiceCollection()
 
 var useCases = app.GetRequiredService<UseCases>();
 
-List<IBooking> bookings = 
+List<IBooking> bookings =
 [
     new HotelBooking("Hotel California", DateTime.Today.AddDays(10), true),
     new FlightBooking("Flight 200", DateTime.Now.AddDays(5), "Economy"),
@@ -26,11 +26,18 @@ foreach (var detail in useCases.GetBookingDetails(bookings))
 }
 
 Console.WriteLine();
-var date = bookings.Select(b => b
+var dateByMatch = bookings.Select(b => b
     .Accept(new MatchBooking<DateTime>(
         h => h.CheckInDate,
         f => f.DepartureTime,
         c => c.PickupDate)
     )
 );
-Console.WriteLine(date);
+
+var dateBySwitch = bookings.Select(b => b switch
+{
+    HotelBooking h => h.CheckInDate,
+    FlightBooking f => f.DepartureTime,
+    CarRentalBooking c => c.PickupDate,
+    _ => throw new NotImplementedException()
+});
