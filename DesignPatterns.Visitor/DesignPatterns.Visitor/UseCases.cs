@@ -8,19 +8,23 @@ public sealed class UseCases(DateValidator _validator)
     {
         foreach (var booking in bookings)
         {
-            yield return booking switch
-            {
-                HotelBooking hotelBooking => new BookingDetail(
-                    $"Hotel Booking for {hotelBooking.HotelName} on {hotelBooking.CheckInDate.ToShortDateString()}",
-                    $"Breakfast included: {hotelBooking.IncludesBreakfast}"
-                ),
-                FlightBooking flightBooking => new BookingDetail(
-                    $"Flight Booking {flightBooking.FlightNumber} departing on {flightBooking.DepartureTime}",
-                    $"Seat Class: {flightBooking.SeatClass}"
-                ),
-                _ => throw new NotImplementedException()
-            };
+            yield return booking.Accept(GetBookingDetailsVisitor.Instance);
         }
+    }
+
+    private sealed class GetBookingDetailsVisitor : IBookingVisitor<BookingDetail>
+    {
+        public static GetBookingDetailsVisitor Instance { get; } = new();
+
+        public BookingDetail Visit(HotelBooking hotelBooking) => new(
+            $"Hotel Booking for {hotelBooking.HotelName} on {hotelBooking.CheckInDate.ToShortDateString()}",
+            $"Breakfast included: {hotelBooking.IncludesBreakfast}"
+        );
+
+        public BookingDetail Visit(FlightBooking flightBooking) => new(
+            $"Flight Booking {flightBooking.FlightNumber} departing on {flightBooking.DepartureTime}",
+            $"Seat Class: {flightBooking.SeatClass}"
+        );
     }
 
     public async Task<bool> ValidateAsync(IEnumerable<IBooking> bookings, CancellationToken ct)
