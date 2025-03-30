@@ -22,3 +22,6 @@ This repository serves as an example of how the `Visitor` pattern can be impleme
 - Add `getDate` example
 ## 09-compare-with-switch
 - Add `getDate` logic via switch expression and compare
+## 10-production-examples
+- `FormulaResultVisitor` - state machine
+- `LoadArrayFormulaVisitor` - paging
