@@ -33,4 +33,4 @@ var date = bookings.Select(b => b
         c => c.PickupDate)
     )
 );
-Console.WriteLine(date);
+Console.WriteLine(string.Join("\n", date));
