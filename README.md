@@ -25,3 +25,7 @@ This repository serves as an example of how the `Visitor` pattern can be impleme
 ## 10-production-examples
 - `FormulaResultVisitor` - state machine
 - `LoadArrayFormulaVisitor` - paging
+## 11-Homework
+- Switch to the `11-homework` branch.
+- Locate the `README` file to review the task instructions.
+
