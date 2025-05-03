@@ -5,8 +5,6 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesignPatterns.Visitor", "DesignPatterns.Visitor\DesignPatterns.Visitor.csproj", "{8E3380BA-B921-4C09-B1C7-D9124BEACC80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductionExamples", "ProductionExamples\ProductionExamples.csproj", "{90CB71AD-8562-4384-B6DC-8A8FB08A88CB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Homework", "Homework\Homework.csproj", "{D7447F26-993B-4A71-AF1F-E76E7034D293}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{8E3380BA-B921-4C09-B1C7-D9124BEACC80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E3380BA-B921-4C09-B1C7-D9124BEACC80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E3380BA-B921-4C09-B1C7-D9124BEACC80}.Release|Any CPU.Build.0 = Release|Any CPU
-		{90CB71AD-8562-4384-B6DC-8A8FB08A88CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{90CB71AD-8562-4384-B6DC-8A8FB08A88CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{90CB71AD-8562-4384-B6DC-8A8FB08A88CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{90CB71AD-8562-4384-B6DC-8A8FB08A88CB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D7447F26-993B-4A71-AF1F-E76E7034D293}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D7447F26-993B-4A71-AF1F-E76E7034D293}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7447F26-993B-4A71-AF1F-E76E7034D293}.Release|Any CPU.ActiveCfg = Release|Any CPU
