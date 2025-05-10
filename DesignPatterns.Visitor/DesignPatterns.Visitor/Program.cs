@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 var app = new ServiceCollection()
     .AddTransient<DateValidator>()
     .AddTransient<UseCases>()
+    .AddTransient<UseCases.ValidateAsyncVisitor>()
     .BuildServiceProvider();
 
 var useCases = app.GetRequiredService<UseCases>();
