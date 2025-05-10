@@ -7,6 +7,17 @@ public interface IBookingVisitor<T>
     T Visit(CarRentalBooking carRentalBooking);
 }
 
+public sealed record MatchBooking<T>(
+    Func<HotelBooking, T> TransformHotelBooking,
+    Func<FlightBooking, T> TransformFlightBooking,
+    Func<CarRentalBooking, T> TransformCarRentalBooking
+) : IBookingVisitor<T>
+{
+    public T Visit(HotelBooking hotelBooking) => TransformHotelBooking(hotelBooking);
+    public T Visit(FlightBooking flightBooking) => TransformFlightBooking(flightBooking);
+    public T Visit(CarRentalBooking carRentalBooking) => TransformCarRentalBooking(carRentalBooking);
+}
+
 public interface IBooking
 {
     public T Accept<T>(IBookingVisitor<T> visitor);
